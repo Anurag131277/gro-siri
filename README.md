@@ -1,3 +1,8 @@
+
+
+#Note- After each pull- look for changes in package.json.If any change found, execute command - "npm install" in root directory of the project.
+
+
 # gro-siri
 Fridge App developed in NodeJS
 
