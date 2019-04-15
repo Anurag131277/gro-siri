@@ -9,20 +9,20 @@
     <main>
         <form class="product-form" action="/add-item" method="POST">
             <div class="form-control">
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" value="">
+                <label for="title">Name</label>
+                <input type="text" name="name" id="title" value="">
             </div>
             <div class="form-control">
                 <label for="imageUrl">Image URL</label>
                 <input type="text" name="imageUrl" id="imageUrl" value="">
             </div>
             <div class="form-control">
-                <label for="price">Price</label>
-                <input type="number" name="price" id="price" step="0.01" value="">
+                <label for="price">Date of Purchase</label>
+                <input type="date" name="dof" id="dof" step="0.01" value="">
             </div>
             <div class="form-control">
-                <label for="description">Description</label>
-                <textarea name="description" id="description" rows="5"></textarea>
+                <label for="description">Expire After</label>
+                <textarea name="expire_after" id="expireday" rows="5"></textarea>
             </div>
             <button class="btn" type="submit">Add Product</button>
         </form>

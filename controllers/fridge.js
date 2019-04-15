@@ -5,14 +5,17 @@ const Fridge = require('../models/fridge');
 
 //controller method to get item list
 exports.getItems=(req, res, next) => {
-   Item.fetchAll(items=>{
+    //calling static function
+   Item.fetchAll()
+   .then(([rows,fieldData])=>{
       res.render('item-list', {
-        prods: items,
+        prods: rows,
         pageTitle: 'All Items',
         path: '/viewitems',
         tofridge : false
       });
-   }); //calling static function
+   })
+   .catch(err =>{ console.log(err);});
 };
 
 //controller method to get index page
@@ -93,26 +96,35 @@ exports.postFridge =(req,res,next)=>{
 //controller function to get item details
 exports.getItem = (req,res,next)=>{
   const prodId = req.params.productId;
-  Item.findById(prodId, product =>{
+  Item.findById(prodId)
+  .then(([rows,fieldData])=>{
     res.render('item-detail',{
-      product: product,
-      pageTitle: product.title,
-      path:'/products'
-    });
-
+      product: rows[0],
+      pageTitle: rows.name,
+      path:'/products',
+      edit:false
+    }); 
+  })
+  .catch(err =>{
+    console.log('GET ITEM |error..',err);
   });
 };
 
 exports.getEditItem = (req,res,next) =>{
+  const editMode = req.query.edit;
+  if(!editMode){
+    res.redirect('/');
+  }
   //edit the item details and save the changes to Product/Item table/file
-  console.log("Logic for GetEditPage here ")
-/*  Item.findById= req.params.productId;
-  console.log("Edit Item details here");
-  res.render('item-detail',{
-    product : product,
-    pageTitle : 'Edit Item',
-    path: '/item-detail',
-    edit : true
-
-  });*/
+  console.log("Logic for GetEditPage here ");
+  const prodId= req.body.productId;
+  console.log('ProductId:-',prodId);
+  Item.findById(prodId, item =>{
+    res.render('add-item',{
+      product : item,
+      pageTitle : 'Edit Item',
+      path: '/item-detail',
+      edit : true
+    });
+  });
 };

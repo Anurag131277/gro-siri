@@ -16,26 +16,30 @@
                             <article class="card product-item">
                                 <header class="card__header">
                                     <h1 class="product__title">
-                                        <%= product.title %>
+                                        <%= product.name %>
                                     </h1>
                                 </header>
                                 <div class="card__image">
-                                    <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                                    <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
                                 </div>
                                 <div class="card__content">
                                     <h2 class="product__price">$
-                                        <%= product.price %>
+                                        <%= product.date_of_purchase %>
                                     </h2>
                                     <p class="product__description">
-                                        <%= product.description %>
+                                        <%= product.expire_after %>
                                     </p>
                                 </div>
                                 <div class="card__actions">
-                                    <a href="item/<%= product.id %>" class='btn'>Details</a>
+                                    <a href="item/<%= product.item_id %>" class='btn'>Details</a>
                                     <% if(tofridge) { %>
                                     <%- include('includes/add-to-fridge.ejs',{product: product})%>
                                         <% } %>
                                 </div>
+                                <form method="POST" action="/edit-item">
+                                    <button class="btn" type="submit">Edit</button>
+                                    <input type="hidden" name="productId" value="<%= product.item_id %>">
+                                </form>
                             </article>
                             <% } %>
                     </div>
