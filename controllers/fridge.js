@@ -2,12 +2,15 @@ const Item =require('../models/product');
 
 const Fridge = require('../models/fridge');
 
+/*const dateFormat = require('dateformat');
+var day=dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");*/
+
 
 //controller method to get item list
 exports.getItems=(req, res, next) => {
     //calling static function
    Item.fetchAll()
-   .then(([rows,fieldData])=>{
+   .then(([rows])=>{
       res.render('item-list', {
         prods: rows,
         pageTitle: 'All Items',
@@ -31,20 +34,27 @@ exports.getIndex = (req,res,next)=>{
 exports.getAddItem = (req,res,next)=>{
   res.render('add-item',{
     pageTitle : 'Add Item',
-    path : '/add-item'
+    path : '/add-item',
+    editing : false
   });
 };
 
 
 //controller to add item in AllItems
 exports.postAddItem = (req,res,next) =>{
-  const title=req.body.title;
+  //console.log("Inside Post add item");
+  const name=req.body.itemName;
   const imageUrl = req.body.imageUrl;
-  const price= req.body.price;
-  const description =req.body.description;
-  const item = new Item(null,title,imageUrl,description,price);
-  item.save();
-  res.redirect('/');
+  const dof= req.body.dof;
+  const expire_after =req.body.expire_after;
+  const item = new Item(null,name,imageUrl,dof,expire_after);
+  item.save()
+  .then( ()=> {
+    res.redirect('/');
+  })
+  .catch(err =>{
+    console.log("Post Add Item | Error",err);
+  });
 }
 
 //1.controller method to get fridge items
@@ -97,10 +107,10 @@ exports.postFridge =(req,res,next)=>{
 exports.getItem = (req,res,next)=>{
   const prodId = req.params.productId;
   Item.findById(prodId)
-  .then(([rows,fieldData])=>{
+  .then(([rows])=>{
     res.render('item-detail',{
       product: rows[0],
-      pageTitle: rows.name,
+      pageTitle: rows[0].name,
       path:'/products',
       edit:false
     }); 
@@ -113,18 +123,30 @@ exports.getItem = (req,res,next)=>{
 exports.getEditItem = (req,res,next) =>{
   const editMode = req.query.edit;
   if(!editMode){
-    res.redirect('/');
+    return res.redirect('/');
   }
-  //edit the item details and save the changes to Product/Item table/file
-  console.log("Logic for GetEditPage here ");
-  const prodId= req.body.productId;
-  console.log('ProductId:-',prodId);
-  Item.findById(prodId, item =>{
+  //console.log('req-',req.params);
+  const prodId = req.params.productId;
+  
+  Item.findById(prodId)
+  .then(([rows,fieldData])=>{
+    
+    const date_x= new Date(rows[0].date_of_purchase);
+    temp=date_x.toISOString().split('T')[0];
+    rows[0].date_of_purchase = temp;
     res.render('add-item',{
-      product : item,
-      pageTitle : 'Edit Item',
-      path: '/item-detail',
-      edit : true
+      pageTitle : 'Edit Item | '+rows[0].name,
+      path: '/edit-item',
+      product: rows[0],
+      editing : editMode
     });
-  });
+  })
+  .catch((err)=>{ console.log('findbyId ERROR',err);});
+  
+    
+};
+
+exports.postEditItem = (req,res,next)=>{
+  console.log('Inside post Edit item');
+  console.log(req.body.item_id);
 };
