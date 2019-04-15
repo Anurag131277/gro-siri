@@ -1,0 +1,30 @@
+<%- include('includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('includes/navigation.ejs') %>
+
+    <main>
+            <div class="grid">
+                <article class="card product-item" style="padding:5px;">
+                    
+                  <a href="/fridge" class="btn">
+                    View Fridge
+                  </a><hr>
+                  <a href="/reminder" class="btn">
+                    Get Reminder
+                  </a><hr>
+                  <a href="/viewitems" class="btn">
+                    Add Items
+                  </a>
+                </article>
+            </div>
+    </main>
+<%- include('includes/end.ejs') %>
+
+<!--
+    Inside a loop,
+        product is a local variable and if there is an include, the include doesnot get that variable.
+        for this we pass the variable to as a parameter in include statement.
+-->

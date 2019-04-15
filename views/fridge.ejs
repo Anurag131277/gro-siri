@@ -1,0 +1,23 @@
+<%- include('includes/head.ejs') %>
+    </head>
+
+    <body>
+        <%- include('includes/navigation.ejs') %>
+
+        <div style="padding:20px;">
+            <a href="/addtofridge" class="btn">Add Item</a>
+        </div>
+        <main>
+        	<% if(products.length > 0){ %>	
+				<ul>
+					<% products.forEach(p => { %>
+						<li><%= p.productData.title %> (<%= p.qty %>)</li>					
+					<% })%>
+
+				</ul>
+        	<% }else{ %>
+        		<h1>No Items in Your Fridge</h1>
+        	<% } %>
+        </main>
+        <%- include('includes/end.ejs') %>
+
