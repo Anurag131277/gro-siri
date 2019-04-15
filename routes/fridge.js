@@ -20,12 +20,13 @@ router.get('/add-item',fridgeController.getAddItem);
 
 router.get('/addtofridge',fridgeController.addToFridge);
 
+router.get('/edit-item/:productId',fridgeController.getEditItem);
 
 router.post('/add-item',fridgeController.postAddItem); //to add item in allitems
 
 router.post('/addtofridge',fridgeController.postFridge);
 
-router.post('/edit-item',fridgeController.getEditItem);
+router.post('/edit-item',fridgeController.postEditItem);
 
 
 
