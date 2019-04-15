@@ -11,9 +11,6 @@
             </div>
             <h2><%= product.date_of_purchase %></h2>
             <p><%= product.expire_after%></p>
-            <form method="POST" action="/edit-item">
-            	<button class="btn" type="submit">Edit</button>
-            	<input type="hidden" name="productId" value="<%= product.item_id %>">
-            </form>
+            <a href="/edit-item/<%= product.item_id %>?edit=true" class="btn">Edit</a>
         </main>
         <%- include('includes/end.ejs') %>

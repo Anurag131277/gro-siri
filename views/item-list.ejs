@@ -36,10 +36,7 @@
                                     <%- include('includes/add-to-fridge.ejs',{product: product})%>
                                         <% } %>
                                 </div>
-                                <form method="POST" action="/edit-item">
-                                    <button class="btn" type="submit">Edit</button>
-                                    <input type="hidden" name="productId" value="<%= product.item_id %>">
-                                </form>
+                                 <a href="/edit-item/<%= product.item_id%>?edit=true" class="btn">Edit</a>
                             </article>
                             <% } %>
                     </div>
