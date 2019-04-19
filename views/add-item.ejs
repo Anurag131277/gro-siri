@@ -8,7 +8,7 @@
 
     <main>
         <form class="product-form" action="/<% if(editing){ %>edit-item<% }else{ %>add-item<% } %>" method="POST">
-              <% if(editing){ %> <input type="hidden" name="item_id" value="<% product.item_id %>"> <% } %>
+              <% if(editing){ %> <input type="hidden" name="item_id" value="<%= product.item_id %>"> <% } %>
             <div class="form-control">
                 <label for="title">Name</label>
                 <input type="text" name="itemName" id="title" value="<% if(editing){ %><%= product.name %><%}%>">
@@ -23,7 +23,7 @@
             </div>
             <div class="form-control">
                 <label for="description">Expire After</label>
-                <input type="text" name="expire_after" value="<% if(editing){ %><%= product.expire_after %><%}%>">
+                <input type="number" name="expire_after" value="<% if(editing){ %><%= product.expire_after %><%}%>">
             </div>
             <button class="btn" type="submit"><% if(editing) { %>Edit<% }else{ %>Add<% } %> Product</button>
         </form>

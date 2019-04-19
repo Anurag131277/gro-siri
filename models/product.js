@@ -1,7 +1,7 @@
 /*module.exports = function Product(){
 
 }*/
-const Fridge= require('./fridge');
+//const Fridge= require('./fridge');
 const db= require('../util/database');
 
 module.exports = class Item{
@@ -15,9 +15,10 @@ module.exports = class Item{
 	}
 
 	save(){ //function/method
-		if(this.id){
+		if(this.item_id){
 			console.log('Inside Save Update data');
-			db.execute('')
+			db.execute('UPDATE items SET name=? , imageurl = ? , date_of_purchase = ? , expire_after = ? WHERE item_id = ?',
+				[this.itemName,this.imageUrl,this.date_of_purchase,this.expire_after,this.item_id]);
 		}else{
 			return db.execute('INSERT INTO items (name,imageurl,date_of_purchase,expire_after) VALUES (?,?,?,?)',
 			[this.itemName,this.imageUrl,this.date_of_purchase,this.expire_after]
@@ -41,4 +42,4 @@ module.exports = class Item{
 
 
 
-}
+}	

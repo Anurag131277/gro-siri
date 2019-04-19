@@ -133,7 +133,7 @@ exports.getEditItem = (req,res,next) =>{
     
     const date_x= new Date(rows[0].date_of_purchase);
     temp=date_x.toISOString().split('T')[0];
-    rows[0].date_of_purchase = temp;
+   rows[0].date_of_purchase = temp;
     res.render('add-item',{
       pageTitle : 'Edit Item | '+rows[0].name,
       path: '/edit-item',
@@ -142,11 +142,42 @@ exports.getEditItem = (req,res,next) =>{
     });
   })
   .catch((err)=>{ console.log('findbyId ERROR',err);});
-  
-    
+   
 };
 
 exports.postEditItem = (req,res,next)=>{
   console.log('Inside post Edit item');
-  console.log(req.body.item_id);
+  //console.log(req.body);
+  let itemId= req.body.item_id;
+  let itemName=req.body.itemName;
+  let imageUrl = req.body.imageUrl;
+  let dof = req.body.dof;
+  let expire_after = req.body.expire_after;
+//console.log('POST DATA');
+//console.log(itemId,itemName,imageUrl,dof,expire_after);
+    Item.findById(itemId)
+    .then(([rows])=>{
+      if(rows[0].item_id == itemId){
+        dof = new Date(dof);
+        expire_after = parseInt(expire_after);
+        //console.log("Formatted Date--",dof);
+        //console.log("Formatted ExpireAfter---",expire_after);
+
+        //console.log("ITEM ID found in DB-- Updating the Product--OLD DATA",rows);
+        const newItem = new Item(rows[0].item_id,itemName,imageUrl,dof,expire_after);
+        //console.log('NEW DATA----',newItem.itemName,newItem.imageUrl,newItem.date_of_purchase,newItem.expire_after);
+        newItem.save()
+      }else{
+        console.log("NO ITEm ID found");
+      }
+    })
+    .then(() =>{
+        console.log("Item Edit successfull");
+        return res.redirect('/');
+      })
+    .catch(err=>{
+      console.log("ERROR | FETCH By ID | Editsave---",err);
+    });
+
+
 };
