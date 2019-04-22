@@ -1,13 +1,4 @@
-const fs= require('fs');
-
-const path=require('path');
-
-const p = path.join(
-	path.dirname(process.mainModule.filename),
-	'data',
-	'fridge.json'
-	);
-
+const db = require('../util/database.js');
 
 module.exports = class Fridge{
 	/*constructor(){
@@ -17,33 +8,12 @@ module.exports = class Fridge{
 	}*/ //1st approach by creating a constructor
 
 	//2nd approach by creating a static function
-	static addProduct(id,productPrice){
-		//Fetch the provious Fridge(from file)
-		fs.readFile(p,(err,fileContent)=>{
-			let fridge= {products:[], totalPrice: 0.0};
-			if(!err){ //create new cart
-				fridge = JSON.parse(fileContent);
-			}
-			//Analyze the Fridge => Find existing products
-			const existingProductIndex=fridge.products.findIndex(prod=> prod.id === id);
-			const existingProduct= fridge.products[existingProductIndex];
-			let updatedProduct;
-			//Add new product/increase quantity
-			if(existingProduct){
-				updatedProduct = {...existingProduct};
-				updatedProduct.qty = updatedProduct.qty+1;
-				fridge.products=[...fridge.products];
-				fridge.products[existingProductIndex] =updatedProduct;
-			}else{
-				updatedProduct = {id:id , qty: 1};
-				fridge.products = [...fridge.products,updatedProduct];
-			}
-			fridge.totalPrice=fridge.totalPrice+ +productPrice;
-			fs.writeFile(p,JSON.stringify(fridge),err =>{
-				if(err)
-					console.log('Error writing to Cart...',err);
-			});
-		});
+	static addItem(id){
+		
+
+
+
+
 	}
 
 	static deleteProduct(id,productPrice){
@@ -68,15 +38,8 @@ module.exports = class Fridge{
 
 	}
 
-	static getFridge(cb){
-		fs.readFile(p,(err,fileContent)=>{
-			const fridge = JSON.parse(fileContent);
-			if(err){
-				cb(null);
-			}else{
-				cb(fridge);
-			}
-		});
+	static getFridge(id){
+		return db.execute('SELECT * from fridge WHERE fridge_id = ?',[id]);
 	}
 
 
