@@ -58,46 +58,64 @@ exports.postAddItem = (req,res,next) =>{
 }
 
 //1.controller method to get fridge items
-exports.getFridge = (req,res,next)=>{
-    Fridge.getFridge(cart =>{
-      Item.fetchAll(products=>{
-        const fridgeItems=[];
-        for(product of products){
-          const fridgeItemData = cart.products.find(prod=> prod.id === product.id);
-          if(fridgeItemData){
-            let p1 ={productData: product, qty: fridgeItemData.qty};
-            fridgeItems.push(p1);
-          }
-        }        
-          res.render('fridge',{
-            pageTitle: 'Your Fridge',
-            path: '/fridge',
-            products: fridgeItems
-          }); 
-      });
+
+exports.getFridge = (req,res,next) => {
+  const Fid= 1;
+  FridgeItemData=[];
+  Fridge.getFridge(Fid)
+  .then(([rows])=>{
+    const FridgeItems=[];
+    for(row of rows){
+      FridgeItems.push(row.item_id);
+    }
+    //console.log('FridgeItems-',FridgeItems);
+
+    Item.fetchAll()
+    .then(([rows])=>{
+      //console.log(rows);
+      for(product in rows){
+        //console.log('product-',rows[product]);
+        if(FridgeItems.includes(rows[product].item_id)){
+          FridgeItemData.push(rows[product]);
+        }
+      }
+     // console.log('Fridge Item Data',FridgeItemData);
+      res.render('fridge',{
+        pageTitle: 'Your Fridge',
+        path: '/fridge',
+        products: FridgeItemData
+      }); 
     });
+  })
+  .catch(err=>{
+    console.log("GET FRIDGE ERR---",err);
+  });
 };
 
 
 //controller to show addtofridge page with all items
 exports.addToFridge = (req,res,next) =>{
-  Item.fetchAll(products => {
-      res.render('item-list',{
+  Item.fetchAll()
+  .then(([rows])=>{
+    res.render('item-list',{
       pageTitle: 'Add To Fridge',
       path: '/addtofridge',
       tofridge : true,
-      prods: products
-    });
-  });
+      prods: rows
+    })
+  })
+  .catch(err=>{
+    console.log("Fetch | AddtoFridge Error",err);
+  })
 };
 
 
 //controller to add item in fridge
 exports.postFridge =(req,res,next)=>{
   const prodId= req.body.productId;
-  Item.findById(prodId,(product)=>{
-    Fridge.addProduct(prodId,product.price);
-  });
+  const FridgeId = 1;
+  console.log('PRODUCT ID-',prodId);
+  Fridge.addItem(prodId);
   res.redirect('/addtofridge');
 };
 
