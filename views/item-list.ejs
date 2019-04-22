@@ -33,7 +33,8 @@
                                 <div class="card__actions">
                                     <a href="item/<%= product.item_id %>" class='btn'>Details</a>
                                     <% if(tofridge) { %>
-                                    <%- include('includes/add-to-fridge.ejs',{product: product})%>
+                                    <%= product.item_id %>
+                                    <%- include('includes/add-to-fridge.ejs',{prodId: product.item_id})%>
                                         <% } %>
                                 </div>
                                  <a href="/edit-item/<%= product.item_id%>?edit=true" class="btn">Edit</a>
