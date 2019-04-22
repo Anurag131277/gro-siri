@@ -112,11 +112,32 @@ exports.addToFridge = (req,res,next) =>{
 
 //controller to add item in fridge
 exports.postFridge =(req,res,next)=>{
-  const prodId= req.body.productId;
+  let prodId= req.body.productId;
+  prodId = parseInt(prodId);
   const FridgeId = 1;
+  let isAdd= false;
+  let products = [];
   console.log('PRODUCT ID-',prodId);
-  Fridge.addItem(prodId);
-  res.redirect('/addtofridge');
+  Fridge.getFridge(FridgeId)
+  .then(([rows]) =>{
+    for(i in rows){
+      let prod = rows[i];
+      products.push(prod.item_id);
+    }
+    let isAdd = products.includes(prodId);
+    console.log('Item Present in fridge?=',isAdd);
+    if(!isAdd){
+      Fridge.addItem(FridgeId,prodId)
+    }
+  })
+  .then(()=>{
+       console.log('Add item to fridge successfull...');
+       res.redirect('/fridge');
+      })
+  .catch(err=>{
+    console.log('Err-',err);
+  });
+ 
 };
 
 
@@ -137,6 +158,8 @@ exports.getItem = (req,res,next)=>{
     console.log('GET ITEM |error..',err);
   });
 };
+
+
 
 exports.getEditItem = (req,res,next) =>{
   const editMode = req.query.edit;

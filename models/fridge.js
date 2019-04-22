@@ -8,12 +8,8 @@ module.exports = class Fridge{
 	}*/ //1st approach by creating a constructor
 
 	//2nd approach by creating a static function
-	static addItem(id){
-		
-
-
-
-
+	static addItem(f_id,i_id){
+		return db.execute('INSERT INTO fridge (fridge_id, item_id) values (?,?)',[f_id,i_id]);
 	}
 
 	static deleteProduct(id,productPrice){
@@ -41,7 +37,6 @@ module.exports = class Fridge{
 	static getFridge(id){
 		return db.execute('SELECT * from fridge WHERE fridge_id = ?',[id]);
 	}
-
 
 };
 
